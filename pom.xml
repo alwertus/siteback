@@ -43,6 +43,18 @@
             <artifactId>json</artifactId>
             <version>20180813</version>
         </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc14</artifactId>
+            <version>10.2.0.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc</artifactId>
+            <version>18</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/lib/orai18n.jar</systemPath> <!-- must match file name -->
+        </dependency>
     </dependencies>
 
 </project>

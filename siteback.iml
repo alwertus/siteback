@@ -27,5 +27,15 @@
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-client:9.4.14.v20181114" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty.websocket:websocket-servlet:9.4.14.v20181114" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20180813" level="project" />
+    <orderEntry type="library" name="Maven: com.oracle:ojdbc14:10.2.0.4.0" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: com.oracle:ojdbc:18">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/src/lib/orai18n.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
