@@ -1,0 +1,15 @@
+﻿управление пользователь
+http://www.firststeps.ru/sql/oracle/r.php?101
+
+создать пользователя
+alter session set "_ORACLE_SCRIPT"=true; -- Без включения этого параметра мне не удалось создать пользователя в 12 Oracle.
+create user tret identified by 3574
+default tablespace users quota unlimited on users;
+grant connect to tret; 
+grant create  table to tret; -- создание таблиц
+grant create sequence to tret; -- создание sequence
+grant create procedure to tret; -- создание процедур
+grant create type to tret; -- создание типов
+grant create trigger to tret; -- создание триггеров
+grant dba to tret;
+commit;
