@@ -29,9 +29,9 @@
     <orderEntry type="library" name="Maven: org.json:json:20180813" level="project" />
     <orderEntry type="library" name="Maven: com.oracle:ojdbc14:10.2.0.4.0" level="project" />
     <orderEntry type="module-library">
-      <library name="Maven: com.oracle:ojdbc:18">
+      <library name="Maven: com.oracle:ojdbc:LATEST">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/src/lib/orai18n.jar!/" />
+          <root url="jar://$MODULE_DIR$/src/lib/ojdbc8-full/ojdbc8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

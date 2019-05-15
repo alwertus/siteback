@@ -1,37 +1,62 @@
 package db;
 
+import oracle.jdbc.driver.OracleConnection;
+import oracle.jdbc.pool.OracleDataSource;
+
 import java.sql.*;
+import java.util.Properties;
 
-public class DBConnection {
-    String sTNSNames = "jdbc:oracle:thin:[tret/3574]@DB11G";
-    String s = "";
+public class DBConnection implements AutoCloseable{
+    private final static String DB_URL = "jdbc:oracle:thin:@127.0.0.1:1521/DB11G";
+    private final static String DB_USER = "tret";
+    private final static String DB_PASSWORD = "3574";
+    private static OracleConnection connection = null;
 
-    public DBConnection() throws SQLException, ClassNotFoundException {
-        System.out.println("hello");
-        Class.forName ("oracle.jdbc.OracleDriver");
+    public static OracleConnection openConnection(){
+        if (connection != null) return connection;
+        Properties info = new Properties();
+        info.put(OracleConnection.CONNECTION_PROPERTY_USER_NAME, DB_USER);
+        info.put(OracleConnection.CONNECTION_PROPERTY_PASSWORD, DB_PASSWORD);
+        info.put(OracleConnection.CONNECTION_PROPERTY_DEFAULT_ROW_PREFETCH, "20");
 
-        Connection conn = DriverManager.getConnection(sTNSNames);
-        // @//machineName:port/SID,   userid,  password
+        OracleDataSource ods = null;
+
         try {
-            Statement stmt = conn.createStatement();
-            try {
-                ResultSet rset = stmt.executeQuery("select BANNER from SYS.V_$VERSION");
-                try {
-                    while (rset.next())
-                        System.out.println (rset.getString(1));   // Print col 1
-                }
-                finally {
-                    try { rset.close(); } catch (Exception ignore) {}
-                }
-            }
-            finally {
-                try { stmt.close(); } catch (Exception ignore) {}
-            }
-        }
-        finally {
-            try { conn.close(); } catch (Exception ignore) {}
+            ods = new OracleDataSource();
+            ods.setURL(DB_URL);
+            ods.setConnectionProperties(info);
+            connection = (OracleConnection) ods.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        System.out.println("bye");
+        return connection;
+    }
+
+    public static OracleConnection getConnection() {
+        return openConnection();
+    }
+
+    public static void closeConnection() {
+        try {
+            if (connection != null) connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    @Override
+    public void close() throws Exception {
+        closeConnection();
     }
 }
+
+/* всякое про базу
+            DatabaseMetaData dbmd = connection.getMetaData();
+            System.out.println("Driver Name: " +                    dbmd.getDriverName());
+            System.out.println("Driver Version: " +                 dbmd.getDriverVersion());
+            System.out.println("Default Row Prefetch Value is: " +  connection.getDefaultRowPrefetch());
+            System.out.println("Database Username is: " +           connection.getUserName());
+ */
