@@ -14,7 +14,8 @@ public class ServerStarter implements Runnable {
     private static IServlet[] servletlist = {                   // список Сервлетов
             new AdminServlet(),
             new MainPageServlet(),
-            new AuthServlet()
+            new AuthServlet(),
+            new InfoPageServlet()
     };
 
     // конструктор

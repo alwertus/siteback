@@ -1,0 +1,34 @@
+sudo apt install mysql-server
+sudo apt install mysql-client
+в файле /etc/mysql/mysql.conf.d/mysqld.cnf изменить на bind-address = 0.0.0.0
+добавить строки в :
+[mysqld]
+skip-character-set-client-handshake
+character-set-server = utf8
+init-connect='SET NAMES utf8'
+collation-server=utf8_general_ci
+default-character-set=utf8
+[client]
+default-character-set=utf8
+[mysqldump]
+default-character-set=utf8
+
+------------------- создание базы, таблицы
+create database website;
+show databases;
+use website;
+
+create table books (book_id int not null auto_increment, book_name varchar(50), primary key(book_id));
+show tables;
+insert into books (book_name) values ('book5');
+select * from books;
+
+------------------------ доступ пользователя
+mysql> GRANT ALL PRIVILEGES ON website.* TO alwertus@"%" IDENTIFIED BY '3574' WITH GRANT OPTION;
+mysql> exit;
+~# mysqladmin -u root -p flush-privileges
+
+------------------------ резервное копирование
+mysqldump -u USER -p PASSWORD DATABASE > /path/to/file/dump.sql
+------------------------ восстановление
+mysql -uroot -p your_base < dump_file.sql

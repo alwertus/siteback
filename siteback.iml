@@ -27,15 +27,7 @@
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-client:9.4.14.v20181114" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty.websocket:websocket-servlet:9.4.14.v20181114" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20180813" level="project" />
-    <orderEntry type="library" name="Maven: com.oracle:ojdbc14:10.2.0.4.0" level="project" />
-    <orderEntry type="module-library">
-      <library name="Maven: com.oracle:ojdbc:LATEST">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/src/lib/ojdbc8-full/ojdbc8.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.16" level="project" />
+    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.6.1" level="project" />
   </component>
 </module>

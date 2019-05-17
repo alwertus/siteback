@@ -40,7 +40,7 @@ public class AuthServlet extends HttpServlet implements IServlet {
             JSONObject jsonEnt = new JSONObject();
 
             String linkName = request.getParameter("element") == null ? "" : request.getParameter("element");
-            String resultString = "Ты жмакнул на ссылку " + linkName;
+            String resultString = "Ты жм111акнул на ссылку " + linkName;
 
             jsonEnt.put("backgroundColor","#99CC66");
             jsonEnt.put("serverInfo", resultString);

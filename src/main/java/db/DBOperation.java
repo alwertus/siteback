@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBOperation {
+
     public static ResultSet getData(String sql) {
         ResultSet rs = null;
         Statement st = null;
@@ -16,23 +17,23 @@ public class DBOperation {
         }
         return rs;
     }
+
     public static void executeSQL(String sql) {
+        Statement st = null;
         try {
-            DBConnection.getConnection().createStatement().executeQuery(sql);
+            st = DBConnection.getConnection().createStatement();
+            st.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public static boolean tableExists(String tableName) {
-        //ResultSet rs = DBOperation.getData("select * from user_tables where lower(table_name) like lower('" + tableName + "');");
-        ResultSet rs = DBOperation.getData("select * from info_html;");
-
+        ResultSet rs = DBOperation.getData("show tables like '" + tableName + "';");
         try {
-            while (rs.next()) return true;
+            while (rs.next())
+                return true;
         } catch (SQLException e) { e.printStackTrace(); }
-
         return false;
     }
-
 }

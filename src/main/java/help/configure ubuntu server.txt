@@ -1,0 +1,18 @@
+файл с сетевыми настройками
+/etc/network/interfaces
+/etc/netplan/*.yaml
+network:
+	version: 2
+	renderer: networkd
+	ethernets:
+		enp0s3:
+			dhcp4: yes
+		enp0s8:
+			dhcp4: no
+			dhcp6: no
+			addresses: [192.168.56.110/24, ]
+			gateway4: 192.168.56.1
+			nameservers:
+				addresses: [8.8.8.8, 8.8.4.4]
+sudo netplan apply
+на виртуалке в качестве сети выбрать сетевой мост
