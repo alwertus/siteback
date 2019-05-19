@@ -33,13 +33,12 @@ public class TableInfoHtmlList {
         if (!tableExists()) createTable();
         String record = "INSERT INTO " + TABLE_NAME + " (title, link_text, position, parent, category_flag) VALUES ('" +
                 String.join("', '", htmlName, linkText, position.toString(), parent, (isCategory ? "1" : "0")) + "');";
-        System.out.println("SQL: " + record);
         DBOperation.executeSQL(record);
     }
 
     public String getAllRecords() {
         if (!tableExists()) return "Error! Info not found";
-        ResultSet rs = DBOperation.getData("select title, link_text from " + TABLE_NAME);
+        ResultSet rs = DBOperation.getData("select title, link_text from " + TABLE_NAME + " order by position;");
         HashSet<String> resultArray = new HashSet<>();
         try {
             while (rs.next()) {
@@ -52,7 +51,7 @@ public class TableInfoHtmlList {
         int i = 0;
         for (String s : resultArray)
             sArr[i++] = s;
-        return String.join(",", sArr);
+        return String.join("~", sArr);
     }
 
     public void createTable() {

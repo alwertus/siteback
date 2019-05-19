@@ -3,15 +3,13 @@ sudo apt install mysql-client
 в файле /etc/mysql/mysql.conf.d/mysqld.cnf изменить на bind-address = 0.0.0.0
 добавить строки в :
 [mysqld]
-skip-character-set-client-handshake
-character-set-server = utf8
+collation-server = utf8_unicode_ci
 init-connect='SET NAMES utf8'
-collation-server=utf8_general_ci
-default-character-set=utf8
-[client]
-default-character-set=utf8
-[mysqldump]
-default-character-set=utf8
+character-set-server = utf8
+
+-----------применить изменения и проверить
+/etc/init.d/mysql restart
+ mysql> show variables like 'char%';
 
 ------------------- создание базы, таблицы
 create database website;
@@ -28,7 +26,11 @@ mysql> GRANT ALL PRIVILEGES ON website.* TO alwertus@"%" IDENTIFIED BY '3574' WI
 mysql> exit;
 ~# mysqladmin -u root -p flush-privileges
 
+
 ------------------------ резервное копирование
 mysqldump -u USER -p PASSWORD DATABASE > /path/to/file/dump.sql
 ------------------------ восстановление
 mysql -uroot -p your_base < dump_file.sql
+
+-------------- клиент для работы
+https://dbeaver.io/download/

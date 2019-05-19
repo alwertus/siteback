@@ -3,7 +3,7 @@ package db;
 import java.sql.*;
 
 public class DBConnection implements AutoCloseable{
-    private final static String DB_URL = "jdbc:mysql://192.168.43.185:3306/website?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow";
+    private final static String DB_URL = "jdbc:mysql://127.0.0.1:3306/website?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow";
     private final static String DB_USER = "alwertus";
     private final static String DB_PASSWORD = "3574";
     private static Connection connection = null;
