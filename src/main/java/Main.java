@@ -1,7 +1,11 @@
-import java.sql.SQLException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Main {
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+    private static final Logger log = LogManager.getLogger(Main.class);
+
+    public static void main(String[] args) {
+        log.info("MAIN");
         // тут всякое своё
 //        TableInfoHtml dbHtml = new TableInfoHtml();
 //        dbHtml.createTable();
@@ -9,7 +13,6 @@ public class Main {
 
 
 //        dbHtml.showAllRecords();
-
         // запуск jetty сервера
         ServerStarter serverStarter = new ServerStarter(args);
         new Thread(serverStarter).start();

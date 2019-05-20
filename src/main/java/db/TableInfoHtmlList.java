@@ -1,11 +1,15 @@
 package db;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashSet;
 
 public class TableInfoHtmlList {
+    private static final Logger log = LogManager.getLogger(TableInfoHtmlList.class);
     private static String TABLE_NAME = "infohtml_list";
     private static String CREATE_TABLE_STRING = "CREATE TABLE " + TABLE_NAME +
             "( row_id INT NOT NULL AUTO_INCREMENT, " +
@@ -18,6 +22,7 @@ public class TableInfoHtmlList {
 
     // constructor
     public TableInfoHtmlList() {
+        log.trace("Constructor");
         // если таблицы нет - создаём её и забиваем тестовыми данными
         if (!tableExists()) {
             createTable();
@@ -29,11 +34,11 @@ public class TableInfoHtmlList {
         }
     }
 
-    public void addRecord(String htmlName, String linkText, Integer position, String parent, boolean isCategory) {
+    public boolean addRecord(String id, String caption, Integer position, String parent, boolean isCategory) {
         if (!tableExists()) createTable();
         String record = "INSERT INTO " + TABLE_NAME + " (title, link_text, position, parent, category_flag) VALUES ('" +
-                String.join("', '", htmlName, linkText, position.toString(), parent, (isCategory ? "1" : "0")) + "');";
-        DBOperation.executeSQL(record);
+                String.join("', '", id, caption, position.toString(), parent, (isCategory ? "1" : "0")) + "');";
+        return DBOperation.executeSQL(record);
     }
 
     public String getAllRecords() {
@@ -57,7 +62,7 @@ public class TableInfoHtmlList {
     public void createTable() {
         if (tableExists()) return;
 
-        System.out.println("creating table: " + TABLE_NAME);
+        log.trace("Creating table: " + TABLE_NAME);
         DBOperation.executeSQL(CREATE_TABLE_STRING);
     }
 

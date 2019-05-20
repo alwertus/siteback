@@ -2,6 +2,8 @@ package servlets;
 
 import db.TableInfoHtml;
 import db.TableInfoHtmlList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,12 +16,14 @@ import java.io.PrintWriter;
 import java.util.Date;
 
 public class InfoPageServlet extends HttpServlet implements IServlet {
-    private TableInfoHtml dbHtml = new TableInfoHtml();
-    private TableInfoHtmlList dbHtmlList = new TableInfoHtmlList();
+    private static final Logger log = LogManager.getLogger(InfoPageServlet.class);
+    private TableInfoHtml dbHtml;
+    private TableInfoHtmlList dbHtmlList;
 
     public InfoPageServlet() {
-
-
+        log.trace("Constructor");
+        dbHtml = new TableInfoHtml();
+        dbHtmlList = new TableInfoHtmlList();
     }
 
     @Override
@@ -32,20 +36,38 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
         response.setCharacterEncoding("utf-8");             // Кодировка отправляемых данных
         try (PrintWriter out = response.getWriter()) {
             JSONObject jsonEnt = new JSONObject();
-
-            String linkName = request.getParameter("element") == null ? "" : request.getParameter("element");
+            String operation = getStringParameter(request, "operation");
+            String linkName = getStringParameter(request, "element");
             String responseString = "";
 
-            if (linkName.equals("GET_MENU_ITEMS"))
-                responseString = dbHtmlList.getAllRecords();
-             else
-                responseString = dbHtml.getHTML(linkName);
+            switch (operation) {
+                case "get_menu_items" :
+                    responseString = dbHtmlList.getAllRecords();
+                    break;
+                case "append" :
+                    String title = getStringParameter(request,"title");
+                    String page = getStringParameter(request,"page");
+                    Boolean result =    dbHtml.addRecord(title, new Date(), page) &&
+                                        dbHtmlList.addRecord(title, title, 0, "", false);
+                    responseString = result ? "OK" : "Error";
+                    break;
+                case "get_html" :
+                    responseString = dbHtml.getHTML(linkName);
+                    break;
+                default :
+                    responseString = "Unknown operation";
+                    break;
+            }
 
-            jsonEnt.put("backgroundColor","#99CC66");
+            jsonEnt.put("backgroundColor", "#99CC66");
             jsonEnt.put("serverInfo", responseString);
 
             out.print(jsonEnt.toString());
         }
+    }
+
+    String getStringParameter(HttpServletRequest request, String paramName) {
+        return request.getParameter(paramName) == null ? "" : request.getParameter(paramName);
     }
 
     @Override
