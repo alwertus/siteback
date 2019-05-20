@@ -47,8 +47,8 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
                 case "append" :
                     String title = getStringParameter(request,"title");
                     String page = getStringParameter(request,"page");
-                    Boolean result =    dbHtml.addRecord(title, new Date(), page) &&
-                                        dbHtmlList.addRecord(title, title, 0, "", false);
+                    Boolean result = dbHtmlList.addRecord(title, title, 0, "", false) &&
+                                     dbHtml.addRecord(title, new Date(), page);
                     responseString = result ? "OK" : "Error";
                     break;
                 case "get_html" :

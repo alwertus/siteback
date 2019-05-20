@@ -50,7 +50,7 @@ public class TableInfoHtmlList {
                 resultArray.add(rs.getString("title") + ":" + rs.getString("link_text"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         String[] sArr = new String[resultArray.size()];
         int i = 0;
