@@ -28,9 +28,14 @@ public class TableInfoHtmlList {
             createTable();
 
             addRecord("category1", "", 0, "", true);
-            for (Integer i = 0; i < 5; i++) {
-                addRecord("nam" + i, "link" + i, i, "category1", false);
+            for (Integer i = 0; i < 4; i++) {
+                addRecord("id" + i, "cat1-title " + i, i, "category1", false);
             }
+            addRecord("category2", "", 1, "", true);
+            for (Integer i = 5; i < 8; i++) {
+                addRecord("id" + i, "cat2-title " + i, i, "category2", false);
+            }
+            addRecord("id4", "cat1-title 4", 4, "category1", false);
         }
     }
 
@@ -62,7 +67,7 @@ public class TableInfoHtmlList {
     public void createTable() {
         if (tableExists()) return;
 
-        log.trace("Creating table: " + TABLE_NAME);
+        log.debug("Creating table: " + TABLE_NAME);
         DBOperation.executeSQL(CREATE_TABLE_STRING);
     }
 

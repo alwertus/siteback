@@ -23,10 +23,10 @@ public class TableInfoHtml {
         if (!tableExists()) {
             log.info("Table " + TABLE_NAME + " is not exisit");
             createTable();
-            addRecord("Общая инфа", new Date(), "<div><p>COMMON jsdflksjdlfjsdf test test test kkkkk zaza</div>");
-            addRecord("ссылка 2", new Date(), "<div><p>2222test test test kkkkk zaza</div>");
-            addRecord("ссылка 3", new Date(), "<div><p>3333test test test kkkkk zaza</div>");
-            addRecord("title02", new Date(), "<div><p>teddassdgdfgdfgasdst test test kkkkk zaza</div>");
+
+            for (Integer i = 0; i < 8; i++) {
+                addRecord("id" + i, new Date(), "text text text text text text text text text " + i.toString());
+            }
         }
     }
 
