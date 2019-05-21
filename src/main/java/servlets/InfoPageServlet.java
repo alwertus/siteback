@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 public class InfoPageServlet extends HttpServlet implements IServlet {
@@ -42,11 +44,13 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
 
             switch (operation) {
                 case "get_menu_items" :
-                    responseString = dbHtmlList.getAllRecords();
+                    ResultSet rs = dbHtmlList.getAllRecords();
+                    responseString = "recordcount:" + putResultsetToJSON(rs, jsonEnt);
+                    log.trace("Send to front: " + responseString);
                     break;
                 case "append" :
-                    String title = getStringParameter(request,"title");
-                    String page = getStringParameter(request,"page");
+                    String title = getStringParameter(request, "title");
+                    String page = getStringParameter(request, "page");
                     Boolean result = dbHtmlList.addRecord(title, title, 0, "", false) &&
                                      dbHtml.addRecord(title, new Date(), page);
                     responseString = result ? "OK" : "Error";
@@ -58,12 +62,28 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
                     responseString = "Unknown operation";
                     break;
             }
-
-            jsonEnt.put("backgroundColor", "#99CC66");
             jsonEnt.put("serverInfo", responseString);
 
             out.print(jsonEnt.toString());
         }
+    }
+
+    // записываем ResultSet из базы в JSON
+    private int putResultsetToJSON(ResultSet rs, JSONObject json) {
+        Integer count = 0;
+        try {
+            while (rs.next()) {
+                json.put("title"        + count.toString(), rs.getString("title"));
+                json.put("link_text"    + count.toString(), rs.getString("link_text"));
+                json.put("position"     + count.toString(), Integer.toString(rs.getInt("position")));
+                json.put("parent"       + count.toString(), rs.getString("parent"));
+                json.put("category_flag"+ count.toString(), Integer.toString(rs.getInt("category_flag")));
+                count++;
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        return count;
     }
 
     String getStringParameter(HttpServletRequest request, String paramName) {

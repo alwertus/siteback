@@ -36,6 +36,9 @@ public class TableInfoHtmlList {
                 addRecord("id" + i, "cat2-title " + i, i, "category2", false);
             }
             addRecord("id4", "cat1-title 4", 4, "category1", false);
+            addRecord("category2-2", "", 2, "category2", true);
+            addRecord("id8", "cat2-2-title ниже", 2, "category2", false);
+            addRecord("id9", "cat2-2-title выше", 1, "category2", false);
         }
     }
 
@@ -46,22 +49,9 @@ public class TableInfoHtmlList {
         return DBOperation.executeSQL(record);
     }
 
-    public String getAllRecords() {
-        if (!tableExists()) return "Error! Info not found";
-        ResultSet rs = DBOperation.getData("select title, link_text from " + TABLE_NAME + " order by position;");
-        HashSet<String> resultArray = new HashSet<>();
-        try {
-            while (rs.next()) {
-                resultArray.add(rs.getString("title") + ":" + rs.getString("link_text"));
-            }
-        } catch (SQLException e) {
-            log.error(e.getMessage());
-        }
-        String[] sArr = new String[resultArray.size()];
-        int i = 0;
-        for (String s : resultArray)
-            sArr[i++] = s;
-        return String.join("~", sArr);
+    public ResultSet getAllRecords() {
+        if (!tableExists()) return null;
+        return DBOperation.getData("select * from " + TABLE_NAME + " order by position;");
     }
 
     public void createTable() {
