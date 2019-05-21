@@ -10,7 +10,7 @@ import java.util.HashSet;
 
 public class TableInfoHtmlList {
     private static final Logger log = LogManager.getLogger(TableInfoHtmlList.class);
-    private static String TABLE_NAME = "infohtml_list";
+    private static String TABLE_NAME = "infohtml_list_temp";
     private static String CREATE_TABLE_STRING = "CREATE TABLE " + TABLE_NAME +
             "( row_id INT NOT NULL AUTO_INCREMENT, " +
             "title VARCHAR(100) NOT NULL, " +

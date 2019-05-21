@@ -1,5 +1,6 @@
 package db;
 
+import help.ServerConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -7,10 +8,9 @@ import java.sql.*;
 
 public class DBConnection implements AutoCloseable {
     private static final Logger log = LogManager.getLogger(DBConnection.class);
-    private final static String DB_URL = "jdbc:mysql://127.0.0.1:3306/website?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow";
-//    private final static String DB_URL = "jdbc:mysql://192.168.43.185:3306/website?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow";
-    private final static String DB_USER = "alwertus";
-    private final static String DB_PASSWORD = "3574";
+    private final static String DB_URL = ServerConfig.getProperty("db_connection");
+    private final static String DB_USER = ServerConfig.getProperty("db_user");
+    private final static String DB_PASSWORD = ServerConfig.getProperty("db_pass");
     private static Connection connection = null;
 
     public static Connection openConnection() {

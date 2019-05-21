@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class TableInfoHtml {
     private static final Logger log = LogManager.getLogger(TableInfoHtml.class);
-    private static String TABLE_NAME = "info_html";
+    private static String TABLE_NAME = "info_html_temp";
     private static String CREATE_TABLE_STRING = "CREATE TABLE " + TABLE_NAME + "( row_id INT NOT NULL AUTO_INCREMENT, title VARCHAR(100) NOT NULL, create_date DATETIME, html TEXT, PRIMARY KEY(row_id));";
     private static String BD_DATE_FORMAT_STRING = "%Y.%m.%d %H:%i:%S";
     private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
