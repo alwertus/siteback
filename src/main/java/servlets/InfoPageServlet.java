@@ -20,14 +20,14 @@ import java.util.Date;
 
 public class InfoPageServlet extends HttpServlet implements IServlet {
     private static final Logger log = LogManager.getLogger(InfoPageServlet.class);
-    private TableInfoHtml dbHtml;
-    private TableInfoHtmlList dbHtmlList;
+//    private TableInfoHtml dbHtml;
+//    private TableInfoHtmlList dbHtmlList;
     private TableInfo dbInfo;
 
     public InfoPageServlet() {
         log.trace("Constructor");
-        dbHtml = new TableInfoHtml();
-        dbHtmlList = new TableInfoHtmlList();
+//        dbHtml = new TableInfoHtml();
+//        dbHtmlList = new TableInfoHtmlList();
         dbInfo = new TableInfo();
     }
 
@@ -46,12 +46,18 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
             String responseString = "";
 
             switch (operation) {
-                case "get_table_info" :
-
+                case "get_branch" :
+                    responseString = "recordcount:" +
+                            putResultsetToJSON (
+                                dbInfo.getBranch(Integer.valueOf(linkName)),
+                                jsonEnt,
+                                new String[] { "row_id", "title", "child_count" }
+                            );
                     break;
-                case "get_menu_items" :
+                /*case "get_menu_items" :
                     ResultSet rs = dbHtmlList.getAllRecords();
-                    responseString = "recordcount:" + putResultsetToJSON(rs, jsonEnt);
+
+                    responseString = "recordcount:" + putResultsetToJSON(rs, jsonEnt, {"title", "link_text", "position", "parent", "category_flag"});
                     log.trace("Send to front: " + responseString);
                     break;
                 case "append" :
@@ -60,9 +66,10 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
                     Boolean result = dbHtmlList.addRecord(title, title, 0, "", false) &&
                                      dbHtml.addRecord(title, new Date(), page);
                     responseString = result ? "OK" : "Error";
-                    break;
+                    break;*/
                 case "get_html" :
-                    responseString = dbHtml.getHTML(linkName);
+//                    responseString = dbHtml.getHTML(linkName);
+                    responseString = dbInfo.getHTML(linkName);
                     break;
                 default :
                     responseString = "Unknown operation";
@@ -75,15 +82,13 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
     }
 
     // записываем ResultSet из базы в JSON
-    private int putResultsetToJSON(ResultSet rs, JSONObject json) {
+    private int putResultsetToJSON(ResultSet rs, JSONObject json, String[] arrColumns) {
         Integer count = 0;
         try {
             while (rs.next()) {
-                json.put("title"        + count.toString(), rs.getString("title"));
-                json.put("link_text"    + count.toString(), rs.getString("link_text"));
-                json.put("position"     + count.toString(), Integer.toString(rs.getInt("position")));
-                json.put("parent"       + count.toString(), rs.getString("parent"));
-                json.put("category_flag"+ count.toString(), Integer.toString(rs.getInt("category_flag")));
+                for (String column : arrColumns) {
+                    json.put(column + count.toString(), rs.getString(column));
+                }
                 count++;
             }
         } catch (SQLException e) {
