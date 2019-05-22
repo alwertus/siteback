@@ -36,6 +36,7 @@ public class TableInfo implements ITable{
             item 3.1
          */
         Integer rec1 = addRecord(0, 0, new Date(), "item1", "Text 1");
+        log.warn(rec1);
 
     }
 
@@ -48,19 +49,15 @@ public class TableInfo implements ITable{
     public Integer getId(Date date, String title) {
         if (!tableExists()) return -1;
         ResultSet rs = DBOperation.getData("select row_id from " + getTableName() +
-                " where created = STR_TO_DATE('" + ServerConfig.SIMPLE_DATE_FORMAT.format(date) + "', '" + ServerConfig.BD_DATE_FORMAT_STRING + "' AND title = "
+                " where created = STR_TO_DATE('" + ServerConfig.SIMPLE_DATE_FORMAT.format(date) + "', '" + ServerConfig.BD_DATE_FORMAT_STRING + "' AND title = '" + title + "';");
         try {
             while (rs.next()) {
-                String id = ((Integer)rs.getInt("row_id")).toString();
-                String title = rs.getString("title");
-                String date = ServerConfig.SIMPLE_DATE_FORMAT.format(new Date(rs.getTimestamp("create_date").getTime()));
-                String html = rs.getString("html");
-                System.out.println(String.join(" - ", id, title, date, html));
+                return rs.getInt("row_id");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
+        return -1;
     }
 
     public Integer addRecord(Integer par_id, Integer weight, Date created, String title, String html) {
