@@ -1,5 +1,6 @@
 package servlets;
 
+import db.TableInfo;
 import db.TableInfoHtml;
 import db.TableInfoHtmlList;
 import org.apache.logging.log4j.LogManager;
@@ -21,11 +22,13 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
     private static final Logger log = LogManager.getLogger(InfoPageServlet.class);
     private TableInfoHtml dbHtml;
     private TableInfoHtmlList dbHtmlList;
+    private TableInfo dbInfo;
 
     public InfoPageServlet() {
         log.trace("Constructor");
         dbHtml = new TableInfoHtml();
         dbHtmlList = new TableInfoHtmlList();
+        dbInfo = new TableInfo();
     }
 
     @Override
@@ -43,6 +46,9 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
             String responseString = "";
 
             switch (operation) {
+                case "get_table_info" :
+
+                    break;
                 case "get_menu_items" :
                     ResultSet rs = dbHtmlList.getAllRecords();
                     responseString = "recordcount:" + putResultsetToJSON(rs, jsonEnt);

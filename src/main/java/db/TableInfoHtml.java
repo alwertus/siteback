@@ -1,5 +1,6 @@
 package db;
 
+import help.ServerConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,8 +14,6 @@ public class TableInfoHtml {
     private static final Logger log = LogManager.getLogger(TableInfoHtml.class);
     private static String TABLE_NAME = "info_html_temp";
     private static String CREATE_TABLE_STRING = "CREATE TABLE " + TABLE_NAME + "( row_id INT NOT NULL AUTO_INCREMENT, title VARCHAR(100) NOT NULL, create_date DATETIME, html TEXT, PRIMARY KEY(row_id));";
-    private static String BD_DATE_FORMAT_STRING = "%Y.%m.%d %H:%i:%S";
-    private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
     // constructor
     public TableInfoHtml() {
@@ -37,7 +36,7 @@ public class TableInfoHtml {
             while (rs.next()) {
                 String id = ((Integer)rs.getInt("row_id")).toString();
                 String title = rs.getString("title");
-                String date = DATE_FORMAT.format(new Date(rs.getTimestamp("create_date").getTime()));
+                String date = ServerConfig.SIMPLE_DATE_FORMAT.format(new Date(rs.getTimestamp("create_date").getTime()));
                 String html = rs.getString("html");
                 System.out.println(String.join(" - ", id, title, date, html));
             }
@@ -63,7 +62,7 @@ public class TableInfoHtml {
         if (!tableExists()) createTable();
         String record = "INSERT INTO " + TABLE_NAME + " (title, create_date, html) VALUES ('" +
                 title + "', " +
-                "STR_TO_DATE('" + DATE_FORMAT.format(date) + "', '" + BD_DATE_FORMAT_STRING + "'), '" +
+                "STR_TO_DATE('" + ServerConfig.SIMPLE_DATE_FORMAT.format(date) + "', '" + ServerConfig.BD_DATE_FORMAT_STRING + "'), '" +
                 html + "');";
         return DBOperation.executeSQL(record);
     }

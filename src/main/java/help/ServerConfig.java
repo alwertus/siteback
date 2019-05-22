@@ -5,12 +5,15 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
 public class ServerConfig {
     private static final Logger log = LogManager.getLogger(ServerConfig.class);
     private static final String configFileName = "config.ini";
+    public static String BD_DATE_FORMAT_STRING = "%Y.%m.%d %H:%i:%S";
+    public static SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
     public static String getProperty(String propertyName) {
         InputStream inputStream;

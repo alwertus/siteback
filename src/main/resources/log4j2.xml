@@ -15,7 +15,7 @@
         </Logger>
 
         <!-- Root Logger -->
-        <Root level="debug"> <!-- тут работает -->
+        <Root level="all"> <!-- тут работает -->
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
