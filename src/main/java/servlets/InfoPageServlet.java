@@ -1,8 +1,6 @@
 package servlets;
 
 import db.TableInfo;
-import db.TableInfoHtml;
-import db.TableInfoHtmlList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
@@ -20,14 +18,10 @@ import java.util.Date;
 
 public class InfoPageServlet extends HttpServlet implements IServlet {
     private static final Logger log = LogManager.getLogger(InfoPageServlet.class);
-//    private TableInfoHtml dbHtml;
-//    private TableInfoHtmlList dbHtmlList;
     private TableInfo dbInfo;
 
     public InfoPageServlet() {
         log.trace("Constructor");
-//        dbHtml = new TableInfoHtml();
-//        dbHtmlList = new TableInfoHtmlList();
         dbInfo = new TableInfo();
     }
 
@@ -36,7 +30,7 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
         return "/InfoPageServlet";
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, JSONException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/json");        // Отправляем от сервера данные в JSON -формате
         response.setCharacterEncoding("utf-8");             // Кодировка отправляемых данных
         try (PrintWriter out = response.getWriter()) {
@@ -53,22 +47,16 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
                                 jsonEnt,
                                 new String[] { "row_id", "title", "child_count" }
                             );
+                    log.trace("Send refreshed branch at ID=" + linkName + " " + responseString);
                     break;
-                /*case "get_menu_items" :
-                    ResultSet rs = dbHtmlList.getAllRecords();
-
-                    responseString = "recordcount:" + putResultsetToJSON(rs, jsonEnt, {"title", "link_text", "position", "parent", "category_flag"});
-                    log.trace("Send to front: " + responseString);
-                    break;
-                case "append" :
+                case "append_page":
                     String title = getStringParameter(request, "title");
                     String page = getStringParameter(request, "page");
-                    Boolean result = dbHtmlList.addRecord(title, title, 0, "", false) &&
-                                     dbHtml.addRecord(title, new Date(), page);
-                    responseString = result ? "OK" : "Error";
-                    break;*/
+                    Integer par_id = Integer.valueOf(getStringParameter(request, "element"));
+                    Integer result = dbInfo.addRecord(par_id, 0, new Date(), title, page);
+                    responseString = result != -1 ? par_id.toString() : result.toString();
+                    break;
                 case "get_html" :
-//                    responseString = dbHtml.getHTML(linkName);
                     responseString = dbInfo.getHTML(linkName);
                     break;
                 default :
@@ -78,6 +66,8 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
             jsonEnt.put("serverInfo", responseString);
 
             out.print(jsonEnt.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -102,11 +92,11 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         try {
             processRequest(request, response);
-        } catch (JSONException ex) {
+        } catch (JSONException e) {
+            log.error("DoPost Error: " + e.getMessage());
         }
     }
 }

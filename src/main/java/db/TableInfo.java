@@ -43,7 +43,6 @@ public class TableInfo implements ITable{
             addRecord(it2, 0, new Date(), "item2.1", "Text 2.1");
         Integer it3 = addRecord(0, 0, new Date(), "item3", "Text 3");
             addRecord(it3, 0, new Date(), "item3.1", "Text 3.1");
-
     }
 
     // constructor
@@ -57,16 +56,8 @@ public class TableInfo implements ITable{
 
     public ResultSet getBranch(Integer id) {
         if (!tableExists()) return null;
-        String sql = "select T.row_id, T.weight, T.created, T.title, (select count(title) as 'cnt' from info T1 where T1.par_id=T.row_id) as 'child_count' from info T where T.par_id=" + id + ";";
+        String sql = "select T.row_id, T.weight, T.created, T.title, (select count(title) as 'cnt' from " + getTableName() + " T1 where T1.par_id=T.row_id) as 'child_count' from " + getTableName() + " T where T.par_id=" + id + ";";
         ResultSet rs = DBOperation.getData(sql);
-        /*try {
-            log.warn("!!! ----- branch ID=" + id + " -----");
-            while (rs.next()) {
-                log.warn("!!! "+ rs.);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }*/
         return rs;
     }
 
