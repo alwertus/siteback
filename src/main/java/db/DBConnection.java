@@ -15,8 +15,12 @@ public class DBConnection implements AutoCloseable {
 
     public static Connection openConnection() {
         if (connection != null) return connection;
+        if (DB_URL == null) {
+            log.error("Can not load DB URL from config file");
+            return null;
+        }
 
-        log.trace("Try to open connection");
+        log.trace("Try to open connection (" + DB_URL + ")");
         try {
             connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             log.trace("<< Success open connection");

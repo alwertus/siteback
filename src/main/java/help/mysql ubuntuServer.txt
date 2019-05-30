@@ -38,3 +38,4 @@ https://dbeaver.io/download/
 --------------- строка коннекта для виртуалки и для локальной бд
 jdbc:mysql://127.0.0.1:3306/website?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow
 jdbc:mysql://192.168.43.185:3306/website?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow
+jdbc:mysql://192.168.56.101:3306/website?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow

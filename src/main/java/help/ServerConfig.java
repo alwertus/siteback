@@ -9,6 +9,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+//TODO сделать самосоздающийся конфиг в папке пользователя
+
+//FIXME многострочный комментарий
+// фыв
+// фывпп
+
 public class ServerConfig {
     private static final Logger log = LogManager.getLogger(ServerConfig.class);
     private static final String configFileName = "config.ini";
