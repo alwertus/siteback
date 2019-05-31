@@ -38,6 +38,10 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
             String operation = getStringParameter(request, "operation");
             String linkName = getStringParameter(request, "element");
             String responseString = "";
+            String title;
+            String page;
+            Integer par_id;
+            Integer result;
 
             switch (operation) {
                 case "get_branch" :
@@ -50,11 +54,24 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
                     log.trace("Send refreshed branch at ID=" + linkName + " " + responseString);
                     break;
                 case "append_page":
-                    String title = getStringParameter(request, "title");
-                    String page = getStringParameter(request, "page");
-                    Integer par_id = Integer.valueOf(getStringParameter(request, "element"));
-                    Integer result = dbInfo.addRecord(par_id, 0, new Date(), title, page);
+                    title = getStringParameter(request, "title");
+                    page = getStringParameter(request, "page");
+                    par_id = Integer.valueOf(getStringParameter(request, "element"));
+                    result = dbInfo.addRecord(par_id, 0, new Date(), title, page);
                     responseString = result != -1 ? par_id.toString() : result.toString();
+                    break;
+                case "edit_page" :
+                    title = getStringParameter(request, "title");
+                    page = getStringParameter(request, "page");
+                    par_id = Integer.valueOf(getStringParameter(request, "element"));
+                    Integer record_id = Integer.valueOf(getStringParameter(request, "record_id"));
+                    if (par_id == -1)
+                        par_id = dbInfo.getParentId(record_id);
+                    result = dbInfo.updateRecord(record_id, par_id, title, page);
+                    responseString = result != -1 ? par_id.toString() : result.toString();
+                    break;
+                case "del_page" :
+                    //TODO доделать удаление записи
                     break;
                 case "get_html" :
                     responseString = dbInfo.getHTML(linkName);
@@ -67,7 +84,9 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
 
             out.print(jsonEnt.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
+        } catch (NumberFormatException e) {
+            log.error("Error convert to Integer: " + e.getMessage());
         }
     }
 

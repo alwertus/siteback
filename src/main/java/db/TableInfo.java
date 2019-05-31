@@ -89,6 +89,20 @@ public class TableInfo implements ITable{
             return -1;
     }
 
+    public Integer updateRecord(Integer id, Integer newPar_id, String newTitle, String newHtml) {
+        if (!tableExists()) return -1; // запись не может быть изменена. таблицы нет
+
+        String query = "UPDATE " + getTableName() + " SET " +
+                "par_id = '" + newPar_id + "', " +
+                "title = '" + newTitle + "', " +
+                "html = '" + newHtml + "' " +
+                "WHERE row_id = " + id;
+        if (DBOperation.executeSQL(query))
+            return id;
+        else
+            return -1;
+    }
+
     public String getHTML(String id) {
         String sResult = "Info not found";
         ResultSet rs = DBOperation.getData("select html from " + getTableName() + " where row_id='" + id + "'");
@@ -100,5 +114,17 @@ public class TableInfo implements ITable{
             log.error(e.getMessage());
         }
         return sResult;
+    }
+
+    public Integer getParentId(Integer id) {
+        ResultSet rs = DBOperation.getData("select par_id from " + getTableName() + " where row_id='" + id + "'");
+        try {
+            while (rs.next()) {
+                return Integer.valueOf(rs.getString("par_id"));
+            }
+        } catch (SQLException | NumberFormatException e) {
+            log.error(e.getMessage());
+        }
+        return -1;
     }
 }
