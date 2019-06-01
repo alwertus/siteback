@@ -71,7 +71,9 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
                     responseString = result != -1 ? par_id.toString() : result.toString();
                     break;
                 case "del_page" :
-                    //TODO доделать удаление записи
+                    Integer delPageId = Integer.valueOf(getStringParameter(request, "element"));
+//                    result = dbInfo.delRecord_GetParentId(delPageId);
+                    responseString = dbInfo.delRecord_GetParentId(delPageId).toString();
                     break;
                 case "get_html" :
                     responseString = dbInfo.getHTML(linkName);
@@ -104,10 +106,6 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
             log.error(e.getMessage());
         }
         return count;
-    }
-
-    String getStringParameter(HttpServletRequest request, String paramName) {
-        return request.getParameter(paramName) == null ? "" : request.getParameter(paramName);
     }
 
     @Override

@@ -15,10 +15,11 @@ public class ServerStarter implements Runnable {
     private static final String HTML_DIR = "html";              // папка с html файлами
     private static Integer port = 8080;                         // порт сервера по умолчанию
     private IServlet[] servletlist = {                   // список Сервлетов
-            new AdminServlet(),
-            new MainPageServlet(),
-            new AuthServlet(),
-            new InfoPageServlet()
+//            new AdminServlet(),
+//            new MainPageServlet(),
+//            new AuthServlet(),
+            new InfoPageServlet(),
+            new EnglishPageServlet()
     };
 
     // конструктор

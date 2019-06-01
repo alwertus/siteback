@@ -77,13 +77,13 @@ public class TableInfo implements ITable{
 
     public Integer addRecord(Integer par_id, Integer weight, Date created, String title, String html) {
         if (!tableExists()) createTable();
-        String record = "INSERT INTO " + getTableName() + " (par_id, weight, created, title, html) VALUES (" +
+        String sql = "INSERT INTO " + getTableName() + " (par_id, weight, created, title, html) VALUES (" +
                 par_id + "," +
                 weight + "," +
                 "STR_TO_DATE('" + ServerConfig.SIMPLE_DATE_FORMAT.format(created) + "', '" + ServerConfig.BD_DATE_FORMAT_STRING + "'), '" +
                 title + "', '" +
                 html + "');";
-        if (DBOperation.executeSQL(record))
+        if (DBOperation.executeSQL(sql))
             return getId(created, title);
         else
             return -1;
@@ -92,15 +92,43 @@ public class TableInfo implements ITable{
     public Integer updateRecord(Integer id, Integer newPar_id, String newTitle, String newHtml) {
         if (!tableExists()) return -1; // запись не может быть изменена. таблицы нет
 
-        String query = "UPDATE " + getTableName() + " SET " +
+        String sql = "UPDATE " + getTableName() + " SET " +
                 "par_id = '" + newPar_id + "', " +
                 "title = '" + newTitle + "', " +
                 "html = '" + newHtml + "' " +
                 "WHERE row_id = " + id;
-        if (DBOperation.executeSQL(query))
+        if (DBOperation.executeSQL(sql))
             return id;
         else
             return -1;
+    }
+
+    public Integer getChildCount(Integer id) {
+        ResultSet childListRS = getBranch(id);
+        int childConut = 0;
+        try {
+            while (childListRS.next()) childConut++;
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        return childConut;
+    }
+
+    public Integer delRecord_GetParentId(Integer id) {
+        if (!tableExists()) return -1;                  // нельзя удалять без таблицы
+        Integer parentId = getParentId(id);             // вычислить id родителя
+
+        // если детей нет - удаляем. если есть - удаляем всех детей и внуков и ...
+        if (getChildCount(id) == 0) {
+            String sql = "DELETE FROM " + getTableName() + " WHERE row_id='" + id + "';";
+            if (!DBOperation.executeSQL(sql))
+                return -1;
+        }
+        else {
+            // DEL ALL
+            return -1;
+        }
+        return parentId;
     }
 
     public String getHTML(String id) {
