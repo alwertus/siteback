@@ -1,5 +1,6 @@
 package servlets;
 
+import db.TableEnglish;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
@@ -14,9 +15,9 @@ import java.util.Date;
 
 public class EnglishPageServlet extends HttpServlet implements IServlet {
     private static final Logger log = LogManager.getLogger(EnglishPageServlet.class);
+    TableEnglish dbEng;
 
-    @Override
-    public String getURL() { return "/EnglishPageServlet"; }
+    @Override public String getURL() { return "/EnglishPageServlet"; }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
@@ -25,6 +26,11 @@ public class EnglishPageServlet extends HttpServlet implements IServlet {
         } catch (JSONException e) {
             log.error("DoPost Error: " + e.getMessage());
         }
+    }
+
+    // constructor
+    public EnglishPageServlet() {
+        dbEng = new TableEnglish();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {

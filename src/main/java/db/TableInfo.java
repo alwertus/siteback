@@ -49,9 +49,9 @@ public class TableInfo implements ITable{
     public TableInfo() {
         log.trace("Constructor");
         init();
-        for (int i = 0; i < 10; i++) {
+        /*for (int i = 0; i < 10; i++) {
             getBranch(i);
-        }
+        }*/
     }
 
     public ResultSet getBranch(Integer id) {
