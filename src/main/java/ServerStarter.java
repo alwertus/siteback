@@ -13,7 +13,7 @@ import javax.servlet.Servlet;
 public class ServerStarter implements Runnable {
     private static final Logger log = LogManager.getLogger(ServerStarter.class);
     private static final String HTML_DIR = "html";              // папка с html файлами
-    private static Integer port = 8080;                         // порт сервера по умолчанию
+    private static Integer port = 5188;                         // порт сервера по умолчанию
     private IServlet[] servletlist = {                   // список Сервлетов
 //            new AdminServlet(),
 //            new MainPageServlet(),
