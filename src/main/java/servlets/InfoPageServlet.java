@@ -52,6 +52,7 @@ public class InfoPageServlet extends HttpServlet implements IServlet {
                                 new String[] { "row_id", "title", "child_count" }
                             );
                     log.trace("Send refreshed branch at ID=" + linkName + " " + responseString);
+                    log.info(getStringParameter(request, "rustextRq"));
                     break;
                 case "append_page":
                     title = getStringParameter(request, "title");
