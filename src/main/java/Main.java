@@ -7,7 +7,6 @@ public class Main {
 
     public static void main(String[] args) {
         log.info("MAIN");
-
         // запуск jetty сервера
         ServerStarter serverStarter = new ServerStarter(args);
         new Thread(serverStarter).start();

@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
+    <Properties>
+        <Property name="Pattern">[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%c{1}] %msg%n</Property>
+    </Properties>
 
     <Appenders>
+
         <Console name="Console" target="SYSTEM_OUT">
-            <!-- default <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
-            <PatternLayout pattern="%d{HH:mm:ss} %-5level [%logger{36}]: %msg%n"/>
+            <PatternLayout pattern="${Pattern}"/>
         </Console>
+
+        <RollingFile name="fileLogger" fileName="siteback.log" filePattern="siteback-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${Pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+            </Policies>
+        </RollingFile>
+
     </Appenders>
 
     <Loggers>
-        <!-- не работает -->
-        <Logger name= "ru.alwertus.siteback" level="error" additivity="true">
-            <AppenderRef ref="Console"/>
+        <Logger name= "ru.alwertus.siteback" level="ALL" additivity="true">
+            <AppenderRef ref="fileLogger"/>
         </Logger>
 
-        <!-- Root Logger -->
-        <Root level="all"> <!-- тут работает -->
+        <Root level="all">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
-
 
 </Configuration>
 <!--
@@ -28,7 +36,15 @@ FATAL	100
 ERROR	200
 WARN	300
 INFO	400     ключевые моменты
-DEBUG	500
-TRACE	600     вход в процедуры, SQL запросы
+DEBUG	500     вход в процедуры
+TRACE	600     SQL запросы и значения переменных
 ALL	Integer.MAX_VALUE
+
+
+ <PatternLayout>
+[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+%d{HH:mm:ss} %-5level [%-10c{1}]: %msg%n
+%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+%d{HH:mm:ss} %-5level [%logger{36}]: %msg%n
+%d{HH:mm:ss} %-5level [%-10c{1}]: %msg%n
 -->
