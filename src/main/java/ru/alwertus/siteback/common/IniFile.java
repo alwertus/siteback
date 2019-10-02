@@ -7,24 +7,24 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
-abstract class IniFile {
-    private static Logger log;
-    private static String CONFIG_FILENAME;
-    private static Properties prop;                                                                                     // все параметры - тут
-    private static String message;
-    static {
-        log = LogManager.getLogger(IniFile.class);
-        CONFIG_FILENAME = "config.ini";
-        prop = new Properties();
+public class IniFile {
+    private Logger log;
+    private String FILENAME;
+    private Properties prop = new Properties();                                                                         // все параметры - тут
+    private String message;
+
+    public IniFile(String fileName, String logName) {
+        FILENAME = fileName;
+        log = LogManager.getLogger(logName);
         loadFromFile();
     }
 
     // load config file
-    private static void loadFromFile() {
+    private void loadFromFile() {
         FileInputStream in = null;
         try {
-            message = "Load Config from file (" + CONFIG_FILENAME + ") ... ";
-            in = new FileInputStream(CONFIG_FILENAME);
+            message = "Load Config from file (" + FILENAME + ") ... ";
+            in = new FileInputStream(FILENAME);
             prop.load(in);
             in.close();
             message += "done";
@@ -36,11 +36,11 @@ abstract class IniFile {
     }
 
     // save config to file
-    public static void saveToFile() {
+    public void saveToFile() {
         FileOutputStream out = null;
         try {
             message = "Save Config ... ";
-            out = new FileOutputStream(CONFIG_FILENAME);
+            out = new FileOutputStream(FILENAME);
             prop.store(out, null);
             out.close();
             message += "done";
@@ -52,7 +52,7 @@ abstract class IniFile {
     }
 
     // return Property from file. If null -> set default value
-    public static String getProp(String propertyName, String defaultValue) {
+    public String getProp(String propertyName, String defaultValue) {
         if (prop.getProperty(propertyName) == null) {
             prop.setProperty(propertyName, defaultValue);
             saveToFile();
@@ -60,7 +60,9 @@ abstract class IniFile {
         return prop.getProperty(propertyName);
     }
 
-    public static String getProp(String propertyName) {
+    public String getProp(String propertyName) {
         return getProp(propertyName, "<CHANGE_ME>");
     }
+
+    public String getFilename() { return FILENAME; }
 }

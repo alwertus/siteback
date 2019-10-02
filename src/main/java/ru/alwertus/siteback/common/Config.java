@@ -3,9 +3,17 @@ package ru.alwertus.siteback.common;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
-import java.util.Properties;
+public class Config {
 
-public class Config extends IniFile{
+/*
+    @Override
+    static Logger setLogger() {
+        return LogManager.getLogger(Config.class.getName());
+    }
+
+    @Override
+    String setFilename() {
+        return "config.ini";
+    }*/
 
 }

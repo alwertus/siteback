@@ -9,12 +9,13 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import ru.alwertus.siteback.common.Config;
+import ru.alwertus.siteback.common.Global;
 import ru.alwertus.siteback.servlets.IServlet;
 
 public class ServerStarter implements Runnable {
     private static final Logger log = LogManager.getLogger(ServerStarter.class);                                        // логгер
-    private static final String HTML_DIR = Config.getProp("html_dir", "html");                                          // папка с FRONT сайтом
-    private static Integer port = Integer.parseInt(Config.getProp("server_port", "5188"));                              // порт
+    private static final String HTML_DIR = Global.Config.getProp("html_dir", "html");                                          // папка с FRONT сайтом
+    private static Integer port = Integer.parseInt(Global.Config.getProp("server_port", "5188"));                              // порт
     private IServlet[] servletlist = {                                                                                  // список Сервлетов
 //            new MainPageServlet()
     };
