@@ -12,7 +12,10 @@ public class Main {
     // start point
     public static void main(String[] args) {
         log.info("====================== START ======================");
-        log.trace(Global.Config.getFilename());
+        /*log.trace("Config -> " + Global.Config.getFilename());
+        log.trace("Config -> " + Global.Config.getProp("Property1_config"));
+        log.trace("Lang -> " + Global.Lang.getFilename());
+        log.trace("Lang -> " + Global.Lang.getProp("Property1_language"));*/
         /*
         DELETE THIS INFO
         192.168.1.8:3306
@@ -23,5 +26,9 @@ public class Main {
         log.trace(Config.getProp("db_user", "<USER_NAME_DATABASE_CHANGE_ME>"));
         log.trace(Config.getProp("db_pass", "<PASSWORD_DATABASE_CHANGE_ME>"));*/
 
+        // Запуск Jetty Server в новом потоке
+        ServerStarter serverStarter = new ServerStarter();
+//        serverStarter.run();
+        new Thread(serverStarter).start();
     }
 }

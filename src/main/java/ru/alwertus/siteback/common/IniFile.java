@@ -13,11 +13,32 @@ public class IniFile {
     private Properties prop = new Properties();                                                                         // все параметры - тут
     private String message;
 
+    // Constructor
     public IniFile(String fileName, String logName) {
         FILENAME = fileName;
         log = LogManager.getLogger(logName);
         loadFromFile();
     }
+
+    // =================================================================================================================
+    // ----- ----- SETTER, GETTER ----- -----
+    public String getFilename() { return FILENAME; }
+
+    // return Property from file. If null -> set default value
+    public String getProp(String propertyName, String defaultValue) {
+        if (prop.getProperty(propertyName) == null) {
+            prop.setProperty(propertyName, defaultValue);
+            saveToFile();
+        }
+        return prop.getProperty(propertyName);
+    }
+
+    public String getProp(String propertyName) {
+        return getProp(propertyName, "<CHANGE_ME>");
+    }
+
+    // =================================================================================================================
+    // ----- ----- FUNCTIONS ----- -----
 
     // load config file
     private void loadFromFile() {
@@ -50,19 +71,4 @@ public class IniFile {
             log.debug(message);
         }
     }
-
-    // return Property from file. If null -> set default value
-    public String getProp(String propertyName, String defaultValue) {
-        if (prop.getProperty(propertyName) == null) {
-            prop.setProperty(propertyName, defaultValue);
-            saveToFile();
-        }
-        return prop.getProperty(propertyName);
-    }
-
-    public String getProp(String propertyName) {
-        return getProp(propertyName, "<CHANGE_ME>");
-    }
-
-    public String getFilename() { return FILENAME; }
 }

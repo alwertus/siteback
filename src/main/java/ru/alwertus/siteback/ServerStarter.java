@@ -6,23 +6,24 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.server.handler.ShutdownHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import ru.alwertus.siteback.common.Config;
 import ru.alwertus.siteback.common.Global;
+import ru.alwertus.siteback.servlets.AdminServlet;
 import ru.alwertus.siteback.servlets.IServlet;
 
 public class ServerStarter implements Runnable {
     private static final Logger log = LogManager.getLogger(ServerStarter.class);                                        // логгер
-    private static final String HTML_DIR = Global.Config.getProp("html_dir", "html");                                          // папка с FRONT сайтом
-    private static Integer port = Integer.parseInt(Global.Config.getProp("server_port", "5188"));                              // порт
+    private static final String HTML_DIR = Global.Config.getProp("html_dir", "html");                                   // папка с FRONT сайтом
+    private static Integer port = Integer.parseInt(Global.Config.getProp("server_port", "5188"));                       // порт
     private IServlet[] servletlist = {                                                                                  // список Сервлетов
-//            new MainPageServlet()
+        new AdminServlet()
     };
 
     @Override
     public void run() {
-        log.debug("Thread server is run");
+        log.debug("Server run at thread: " + Thread.currentThread());
 
         // ------------------------- запуск веб сервера ----------------------------
         // Создание отдельных сервлетов для разных ссылок
@@ -36,18 +37,20 @@ public class ServerStarter implements Runnable {
         resourceHandler.setResourceBase(HTML_DIR);
 
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] {resourceHandler, context});
+        handlers.setHandlers(new Handler[] {
+                resourceHandler,
+                context
+        });
 
-        Server server = new Server(port);                                                                               // новый Jetty сервер
-        server.setHandler(handlers);                                                                                    // ранее сюда передавал context
+        Global.server = new Server(port);                                                                               // новый Jetty сервер
+        Global.server.setHandler(handlers);                                                                             // ранее сюда передавал context
 
         try {                                                                                                           // попытка запуска сервера
-            server.start();
-            server.join();
+            Global.server.start();
+            Global.server.join();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Jetty Server Error: " + e.getMessage());
         }
-
     }
 
     // Constructor
