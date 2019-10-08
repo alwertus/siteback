@@ -1,4 +1,4 @@
-package servlets;
+package old.servlets;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AuthServlet extends HttpServlet implements IServlet {
     @Override

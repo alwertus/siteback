@@ -1,3 +1,5 @@
+package old;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Handler;
@@ -6,9 +8,7 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import servlets.*;
-
-import javax.servlet.Servlet;
+import old.servlets.*;
 
 public class ServerStarter implements Runnable {
     private static final Logger log = LogManager.getLogger(ServerStarter.class);

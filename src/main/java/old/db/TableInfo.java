@@ -1,6 +1,6 @@
-package db;
+package old.db;
 
-import help.ServerConfig;
+import old.help.ServerConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

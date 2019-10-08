@@ -1,4 +1,4 @@
-package servlets;
+package old.servlets;
 
 import javax.servlet.http.HttpServlet;
 
