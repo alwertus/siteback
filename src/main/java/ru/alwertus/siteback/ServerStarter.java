@@ -11,6 +11,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import ru.alwertus.siteback.common.Global;
 import ru.alwertus.siteback.servlets.AdminServlet;
+import ru.alwertus.siteback.servlets.AuthServlet;
 import ru.alwertus.siteback.servlets.IServlet;
 import ru.alwertus.siteback.servlets.MenuItemsServlet;
 
@@ -20,7 +21,8 @@ public class ServerStarter implements Runnable {
     private static Integer port = Integer.parseInt(Global.Config.getProp("server_port", "5188"));                       // порт
     private IServlet[] servletlist = {                                                                                  // список Сервлетов
         new AdminServlet(),
-        new MenuItemsServlet()
+        new MenuItemsServlet(),
+        new AuthServlet()
     };
 
     @Override
