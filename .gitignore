@@ -5,3 +5,4 @@ siteback.iml
 src/main/resources/log4j2.xml
 src/main/resources/config.ini
 siteback.log
+config.ini

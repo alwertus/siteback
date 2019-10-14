@@ -1,5 +1,6 @@
 package ru.alwertus.siteback.servlets;
 
+import old.db.DBOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
@@ -26,6 +27,21 @@ public class AuthServlet extends HttpServlet implements IServlet  {
         log.trace(jsonRq.toString());
 
         String operation = jsonRq.getString("operation");
+
+        if (operation.equals("test")) {
+            JSONObject jsonRs = new JSONObject();
+            response.setContentType("application/json;charset=utf-8");
+            jsonRs.put("errorCode","1");
+
+            DBOperation.tableExists("pages");
+
+            jsonRs.put("errorMsg","this is error message");
+            try (PrintWriter out = response.getWriter()) {
+                out.print(jsonRs.toString());
+            } catch (IOException e) {
+                log.error(e.getMessage());
+            }
+        }
 
         if (!operation.equals("login")) return;
 

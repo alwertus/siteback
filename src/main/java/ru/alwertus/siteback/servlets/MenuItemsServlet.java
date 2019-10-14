@@ -23,11 +23,8 @@ public class MenuItemsServlet extends HttpServlet implements IServlet  {
 
         // REQUEST ----------------------------------------
         JSONObject jsonRq = getJsonRequest(request);
-        log.info(jsonRq.toString());
-
-        log.info("operation=" + jsonRq.getString("operation"));
-        log.info("userLoginAs=" + jsonRq.getString("userLoginAs"));
         String sessionString = jsonRq.getString("sessionString");
+        log.trace(jsonRq.toString());
 
         // RESPONSE ---------------------------------------
         response.setContentType("application/json;charset=utf-8");
@@ -66,7 +63,7 @@ public class MenuItemsServlet extends HttpServlet implements IServlet  {
                 sessionString.equals("3333333333")) {
             JSONObject jsonItem4 = new JSONObject();
             jsonItem4.put("id", "4");
-            jsonItem4.put("name", "Гуманойд");
+            jsonItem4.put("name", "Гачимучи");
             jsonItem4.put("link", "link4");
             jsonArr.put(jsonItem4);
         }
