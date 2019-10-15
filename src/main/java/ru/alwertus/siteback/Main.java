@@ -3,6 +3,7 @@ package ru.alwertus.siteback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.alwertus.siteback.common.Global;
+import ru.alwertus.siteback.db.DbConnector;
 
 // Version: 2.0
 public class Main {
@@ -22,12 +23,15 @@ public class Main {
         192.168.1.8:3306
         alwertus
         3574
-
-
 */
-        // Запуск Jetty Server в новом потоке
+        log.info(DbConnector.getConnection().toString());
+        /*
         ServerStarter serverStarter = new ServerStarter();
-//        serverStarter.run();
-        new Thread(serverStarter).start();
+        if (true)
+            new Thread(serverStarter).start();                                                                          // Запуск Jetty Server в новом потоке
+        else
+            serverStarter.run();                                                                                        // Запуск Jetty Server
+         */
+
     }
 }
