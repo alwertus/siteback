@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 import ru.alwertus.siteback.common.Global;
 import ru.alwertus.siteback.db.DbConnector;
 
+import java.util.Scanner;
+
 // Version: 2.0
 public class Main {
     private static Logger log = LogManager.getLogger(Main.class.getName());
@@ -24,7 +26,12 @@ public class Main {
         alwertus
         3574
 */
-        log.info(DbConnector.getConnection().toString());
+        Scanner scanner = new Scanner(System.in);
+        String inputString;
+        while (!(inputString = scanner.nextLine()).equals("exit")) {
+            log.info(DbConnector.getConnection() == null ? "" : DbConnector.getConnection().toString());
+        }
+
         /*
         ServerStarter serverStarter = new ServerStarter();
         if (true)

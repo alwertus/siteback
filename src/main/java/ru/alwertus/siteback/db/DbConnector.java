@@ -16,26 +16,27 @@ public class DbConnector {
     private final static String DB_PASSWORD = Global.Config.getProp("db_pass", "<PASSWORD_DATABASE_CHANGE_ME>");
     private static Connection connection = null;
 
-    public static Connection getConnection() {
-        if (!isDbConnected()) {
-            if (DB_URL == null) {
-                log.error("DB url is null");
-                return null;
-            }
-
-            log.trace("Try to open connection (" + DB_URL + ")");
-            try {
-                connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                log.trace("<< Success open connection");
-            } catch (SQLException e) {
-                log.error("<< Error open DB connection: " + e.getMessage());
-                connection = null;
-            }
+    // принудительно открыть соединение
+    private static boolean openConnection() {
+        try {
+            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        } catch (SQLException e) {
+            connection = null;
+            return false;
         }
+        return true;
+    }
+
+
+    public static Connection getConnection() {
+        if (!isDbConnected())
+            if (!openConnection())
+                log.error("Connection can't be established");
         return connection;
     }
 
-    public static boolean isDbConnected() {
+    // тестовый запрос в БД для проверки соединения
+    private static boolean isDbConnected() {
         if (connection == null) return false;
         final String CHECK_SQL_QUERY = "SELECT 1";
         boolean isConnected = false;
