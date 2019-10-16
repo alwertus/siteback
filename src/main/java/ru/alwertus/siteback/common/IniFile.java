@@ -18,6 +18,7 @@ public class IniFile {
         FILENAME = fileName;
         log = LogManager.getLogger(logName);
         loadFromFile();
+        getProp("THIS_FILENAME", FILENAME);
     }
 
     // =================================================================================================================
@@ -33,16 +34,17 @@ public class IniFile {
         return prop.getProperty(propertyName);
     }
 
+    /*
     public String getProp(String propertyName) {
         return getProp(propertyName, "<CHANGE_ME>");
-    }
+    }*/
 
     // =================================================================================================================
     // ----- ----- FUNCTIONS ----- -----
 
     // load config file
     private void loadFromFile() {
-        FileInputStream in = null;
+        FileInputStream in;
         try {
             message = "Load Config from file (" + FILENAME + ") ... ";
             in = new FileInputStream(FILENAME);
@@ -57,8 +59,8 @@ public class IniFile {
     }
 
     // save config to file
-    public void saveToFile() {
-        FileOutputStream out = null;
+    private void saveToFile() {
+        FileOutputStream out;
         try {
             message = "Save Config ... ";
             out = new FileOutputStream(FILENAME);

@@ -1,4 +1,4 @@
-package ru.alwertus.siteback.db;
+package ru.alwertus.siteback.recycle;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBOperation {
-    private static final Logger log = LogManager.getLogger(DBOperation.class);
+  /*  private static final Logger log = LogManager.getLogger(DBOperation.class);
 
     public static ResultSet getData(String sql) {
         log.trace("Get ResultSet: " + sql);
@@ -50,5 +50,5 @@ public class DBOperation {
         }
         log.trace("<< No. Table is not exisit");
         return false;
-    }
+    }*/
 }

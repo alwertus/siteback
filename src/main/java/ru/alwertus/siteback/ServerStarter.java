@@ -27,7 +27,7 @@ public class ServerStarter implements Runnable {
 
     @Override
     public void run() {
-        log.debug("Server run at thread: " + Thread.currentThread());
+        log.debug("# Server run at thread: " + Thread.currentThread());
 
         // ------------------------- запуск веб сервера ----------------------------
         // Создание отдельных сервлетов для разных ссылок
