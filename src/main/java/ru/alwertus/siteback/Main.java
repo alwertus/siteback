@@ -3,6 +3,7 @@ package ru.alwertus.siteback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.alwertus.siteback.db.DB;
+import ru.alwertus.siteback.db.Pages;
 import ru.alwertus.siteback.db.Users;
 
 import java.sql.ResultSet;
@@ -19,56 +20,37 @@ public class Main {
     // start point
     public static void main(String[] args) {
         log.info("# ====================== START ======================");
+//        DB.executeSQL("drop table pagelist, roles, users");
+//        DB.tablestructureInit();
 
-        Users users = new Users();
-
-
-
-        /*
         // test db connection
         Scanner scanner = new Scanner(System.in);
 
-//        do {
-//            System.out.println("-------------------------------");
-//            System.out.print(">> INPUT QUERY: ");
-//            String inputString = scanner.nextLine();
+        do {
+            System.out.println("-------------------------------");
+            System.out.print(">> INPUT COMMAND: ");
+            String inputString = scanner.nextLine();
 
-
-
-
-
-            ResultSet rs = DB.getData(inputString);
             try {
-                ResultSetMetaData meta = null;
-                meta = rs.getMetaData();
-
-                //get column names
-                int colCount = meta.getColumnCount();
-                ArrayList<String> cols = new ArrayList<String>();
-                for (int index=1; index<=colCount; index++)
-                    cols.add(meta.getColumnName(index));
-
-                //fetch out rows
-                ArrayList<HashMap<String,Object>> rows =
-                        new ArrayList<HashMap<String,Object>>();
-
-                while (rs.next()) {
-                    HashMap<String,Object> row = new HashMap<String,Object>();
-                    for (String colName:cols) {
-                        Object val = rs.getObject(colName);
-                        row.put(colName,val);
-                    }
-                    rows.add(row);
+                String c = inputString.split(":")[0];
+                String s1 = inputString.split(":")[1];
+                if (c.equals("+")) {
+                    String s2 = inputString.split(":")[2];
+                    log.trace(Users.authUser(s1, s2));
                 }
-                System.out.println("<< " + rows.toString());
+                if (c.equals("-")) {
+                    log.trace(Users.logoutUser(s1));
+                }
+                if (c.equals("g")) {
+                    log.trace(Pages.getPageList(s1));
+                }
             } catch (Exception e) {
-                log.error(e.getMessage());
+                log.error("Error: " + e.getMessage());
             }
+//            System.out.println(DB.rsToString(DB.getData(inputString)));
+        } while(true);
 
-//        } while(true);
-
-        /*
-
+/*
         ServerStarter serverStarter = new ServerStarter();
         if (true)
             new Thread(serverStarter).start();                                                                          // Запуск Jetty Server в новом потоке

@@ -1,51 +1,51 @@
 package ru.alwertus.siteback.db;
 
-import java.util.HashMap;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Users {
-    public HashMap<String,String> SQL = new HashMap<>();
+    private static final Logger log = LogManager.getLogger(Users.class);
 
-    // constructor
-    public Users() {
-        SQL.put("1.0",
-                "CREATE TABLE IF NOT EXISTS USERS ( " + String.join(", ", new String[]{
-                        "row_id INT NOT NULL AUTO_INCREMENT",
-                        "name VARCHAR(30)",
-                        "login VARCHAR(30)",
-                        "password VARCHAR(30)",
-                        "created DATETIME",
-                        "lastlogin DATETIME",
-                        "sessionkey VARCHAR(20)",
-                        "PRIMARY KEY(row_id)"
-                }) +");");
+    // return OK:newSessionKey or ERR:errCode
+    public static String authUser(String login, String password) {
+        log.debug("# Try to authentication user (login:pass) = " + login + ":" + password);
+        String userId = getUserId(login, password);
+        if (userId.equals("")) return "ERR:0";
 
-        SQL.put("2.0",
-                "CREATE TABLE IF NOT EXISTS ROLES ( " + String.join(", ", new String[]{
-                        "row_id INT NOT NULL AUTO_INCREMENT",
-                        "name VARCHAR(30)",
-                        "PRIMARY KEY(row_id)"
-                }) +");");
-        SQL.put("2.1", "INSERT IGNORE INTO ROLES (row_id, name) VALUES ('1','owner'),('2','admin'),('3','user'),('4','none');");
-
-        SQL.put("3.0",
-                "CREATE TABLE IF NOT EXISTS USR_ROLE_INT ( " + String.join(", ", new String[]{
-                        "row_id INT NOT NULL AUTO_INCREMENT",
-                        "user_id INT",
-                        "role_id INT",
-                        "PRIMARY KEY(row_id)"
-                }) +");");
-        SQL.put("3.1", "INSERT IGNORE INTO USR_ROLE_INT (row_id, name) VALUES ('1','owner'),('2','admin'),('3','user'),('4','none');");
-
-        init();
+        return "OK:" + generateNewSessionKey(userId);
     }
 
-    public void init() {
-        DB.executeSQL(SQL.get("1.0"));
-        DB.executeSQL(SQL.get("2.0"));
-        DB.executeSQL(SQL.get("2.1"));
-        DB.executeSQL(SQL.get("3.0"));
-        DB.executeSQL(SQL.get("3.1"));
-
+    // return OK:Logout or ERR:0
+    public static String logoutUser(String sessionKey) {
+        log.debug("# User logout (sessionkey");
+        String userId = getUserId(sessionKey);
+        if (userId.equals("")) return "ERR:0";
+        DB.executeSQL("update users set sessionkey='' where row_id='" + userId + "';");
+        return "OK:Logout";
     }
 
+    private static String getUserId(String login, String password) {
+        return DB.getFieldValue("select row_id from users where login='" + login + "' and password='" + password + "';", "row_id");
+    }
+
+    public static String getUserId(String sessionKey) {
+        return DB.getFieldValue("select row_id from users where sessionkey='" + sessionKey + "';", "row_id");
+    }
+    public static String getRole(String userId) {
+        return DB.getFieldValue("select t2.name as role from users t1, roles t2 where t1.role_id = t2.row_id and t1.row_id='" + userId + "';", "role");
+    }
+
+    // generate session
+    private static String generateNewSessionKey(String userId) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssz");
+        String newSessionKey = "~" + userId + "~" + dateFormat.format(new Date()) + "~";
+
+        DB.executeSQL("update users set sessionkey='" + newSessionKey + "', lastlogin=NOW() where row_id='" + userId + "';");
+        return DB.getFieldValue("select sessionkey from users where row_id='" + userId + "';","sessionkey");
+    }
 }
