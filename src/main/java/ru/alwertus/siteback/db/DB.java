@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class DB {
     private static final Logger log = LogManager.getLogger(DB.class);
-    private final static String DB_URL = Global.Config.getProp("db_connection", "jdbc:mysql://<IP_ADDRESS_DATABASE_CHANGE_ME>:<PORT_CHANGE_ME>/website?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow");
+    private final static String DB_URL = Global.Config.getProp("db_connection", "jdbc:mysql://<IP_ADDRESS_DATABASE_CHANGE_ME>:3306/website?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow");
     private final static String DB_USER = Global.Config.getProp("db_user", "<USER_NAME_DATABASE_CHANGE_ME>");
     private final static String DB_PASSWORD = Global.Config.getProp("db_pass", "<PASSWORD_DATABASE_CHANGE_ME>");
     private static Connection connection = null;
@@ -154,7 +154,7 @@ public class DB {
                 "('1', 'GodMode', 'god', 'qweQWE123!@#', '1', now(), now(), '')," +
                 "('2', 'Admin', 'admin', 'admin', '2', now(), now(), '')," +
                 "('3', 'Alwertus', '1', '1', '3', now(), now(), '')," +
-                "('4', 'Машулька', '2', '2', '3', now(), now(), '')" +
+                "('4', 'Машулька', '2', '2', '3', now(), now(), '')," +
                 "('5', 'Registered', '3', '3', '4', now(), now(), '')" +
                 ";");
 
@@ -179,7 +179,7 @@ public class DB {
                 "('2', 'Володя', 'alwertus', '3', '3')," +
                 "('3', 'Мащпулькэ', 'chevima', '4', '3')," +
                 "('4', 'Зареганный', 'news', '2', '4')," +
-                "('5', 'Админка', 'admin', '2', '2')" +
+                "('5', 'Админка', 'admin', '2', '2')," +
                 "('6', 'GOD', 'god', '3', '1')" +
                 ";");
 

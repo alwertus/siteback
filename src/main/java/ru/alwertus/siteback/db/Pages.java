@@ -3,8 +3,11 @@ package ru.alwertus.siteback.db;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Pages {
     private static final Logger log = LogManager.getLogger(Pages.class);
@@ -22,12 +25,12 @@ public class Pages {
      * @param sessionKey
      * @return
      */
-    public static String getPageList(String sessionKey) {
+    public static JSONArray getPageList(String sessionKey) {
         log.debug("# get page list for sessionkey=" + sessionKey);
         String userId = Users.getUserId(sessionKey);
         ResultSet rs = null;
         String outFieldList = "*";
-        if (userId.equals(""))
+        if (userId.equals("") || sessionKey.equals(""))
             rs = DB.getData("select " + outFieldList + " from pagelist where access_id in (select row_id from roles where name='any');");
         else {
             String userRoleName = Users.getRole(userId);
@@ -46,6 +49,19 @@ public class Pages {
                     rs = DB.getData("select " + outFieldList + " from pagelist where access_id in (select row_id from roles where name='any');");
             }
         }
-        return DB.rsToString(rs);
+        JSONArray jsonArr = new JSONArray();
+        try {
+            while (rs.next()) {
+                jsonArr.put(new JSONObject()
+                        .put("id", rs.getString("row_id"))
+                        .put("name", rs.getString("title"))
+                        .put("link", rs.getString("link"))
+                );
+            }
+        } catch (SQLException e) {
+            log.error("Error get ResultSet value(s): " + e.getMessage());
+        }
+
+        return jsonArr;
     }
 }

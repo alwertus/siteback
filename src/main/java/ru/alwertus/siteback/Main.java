@@ -23,6 +23,7 @@ public class Main {
 //        DB.executeSQL("drop table pagelist, roles, users");
 //        DB.tablestructureInit();
 
+        /*
         // test db connection
         Scanner scanner = new Scanner(System.in);
 
@@ -49,15 +50,12 @@ public class Main {
             }
 //            System.out.println(DB.rsToString(DB.getData(inputString)));
         } while(true);
+*/
 
-/*
         ServerStarter serverStarter = new ServerStarter();
         if (true)
             new Thread(serverStarter).start();                                                                          // Запуск Jetty Server в новом потоке
         else
             serverStarter.run();                                                                                        // Запуск Jetty Server
-
-         */
-
     }
 }

@@ -2,6 +2,7 @@ package ru.alwertus.siteback.db;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,13 +12,25 @@ import java.util.Date;
 public class Users {
     private static final Logger log = LogManager.getLogger(Users.class);
 
-    // return OK:newSessionKey or ERR:errCode
-    public static String authUser(String login, String password) {
+    public static JSONObject authUser(String login, String password) {
         log.debug("# Try to authentication user (login:pass) = " + login + ":" + password);
         String userId = getUserId(login, password);
-        if (userId.equals("")) return "ERR:0";
 
-        return "OK:" + generateNewSessionKey(userId);
+        JSONObject jsonRs = new JSONObject();
+        if (userId.equals("")) {
+            jsonRs.put("sessionString", "");
+            jsonRs.put("loginName", "Гость");
+            jsonRs.put("errorCode", "1");
+            jsonRs.put("errorMsg", "Нет такого пользователя");
+        } else {
+            String sessionKey = generateNewSessionKey(userId);
+            jsonRs.put("sessionString", sessionKey);
+            jsonRs.put("loginName", getUserName(sessionKey));
+            jsonRs.put("errorCode", "0");
+            jsonRs.put("errorMsg", "");
+        }
+
+        return jsonRs;
     }
 
     // return OK:Logout or ERR:0
@@ -36,6 +49,11 @@ public class Users {
     public static String getUserId(String sessionKey) {
         return DB.getFieldValue("select row_id from users where sessionkey='" + sessionKey + "';", "row_id");
     }
+
+    public static String getUserName(String sessionKey) {
+        return DB.getFieldValue("select name from users where sessionkey='" + sessionKey + "';", "name");
+    }
+
     public static String getRole(String userId) {
         return DB.getFieldValue("select t2.name as role from users t1, roles t2 where t1.role_id = t2.row_id and t1.row_id='" + userId + "';", "role");
     }

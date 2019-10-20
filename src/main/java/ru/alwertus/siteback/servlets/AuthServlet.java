@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import ru.alwertus.siteback.db.Users;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,63 +22,31 @@ public class AuthServlet extends HttpServlet implements IServlet  {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         log.trace("take POST");
-
-        // REQUEST ----------------------------------------
+        response.setContentType("application/json;charset=utf-8");
         JSONObject jsonRq = getJsonRequest(request);
-        log.trace(jsonRq.toString());
-
+        JSONObject jsonRs = new JSONObject();
         String operation = jsonRq.getString("operation");
 
-        if (operation.equals("test")) {
-            JSONObject jsonRs = new JSONObject();
-            response.setContentType("application/json;charset=utf-8");
-            jsonRs.put("errorCode","1");
-
-            DBOperation.tableExists("pages");
-
-            jsonRs.put("errorMsg","this is error message");
-            try (PrintWriter out = response.getWriter()) {
-                out.print(jsonRs.toString());
-            } catch (IOException e) {
-                log.error(e.getMessage());
-            }
-        }
-
-        if (!operation.equals("login")) return;
-
-        String userName = jsonRq.getString("userLogin");
-        String userPass = jsonRq.getString("userPass");
-
-        // RESPONSE ---------------------------------------
-        JSONObject jsonRs = new JSONObject();
-        response.setContentType("application/json;charset=utf-8");
-
-        if (userName.equals("1")&&userPass.equals("1")) {
-            jsonRs.put("sessionString","1111111111");
-            jsonRs.put("loginName","Володя");
-            jsonRs.put("errorCode","0");
-            jsonRs.put("errorMsg","");
-        } else if (userName.equals("2")&&userPass.equals("2")) {
-            jsonRs.put("sessionString","2222222222");
-            jsonRs.put("loginName","Машуличка");
-            jsonRs.put("errorCode","0");
-            jsonRs.put("errorMsg","");
-        } else if (userName.equals("3")&&userPass.equals("3")) {
-            jsonRs.put("sessionString","3333333333");
-            jsonRs.put("loginName","Левыйчел");
-            jsonRs.put("errorCode","0");
-            jsonRs.put("errorMsg","");
-        } else {
-            jsonRs.put("sessionString","");
-            jsonRs.put("loginName","Гость");
-            jsonRs.put("errorCode","1");
-            jsonRs.put("errorMsg","Нет такого пользователя");
-        }
-
-        try (PrintWriter out = response.getWriter()) {
-            out.print(jsonRs.toString());
-        } catch (IOException e) {
-            log.error(e.getMessage());
+        log.trace(jsonRq.toString());
+        switch (operation) {
+            case "logout":
+                jsonRs.put("errorCode", "0");
+                jsonRs.put("errorMsg", Users.logoutUser(jsonRq.getString("sessionString")));
+                try (PrintWriter out = response.getWriter()) {
+                    out.print(jsonRs.toString());
+                } catch (IOException e) {
+                    log.error(e.getMessage());
+                }
+                break;
+            case "login":
+                String userName = jsonRq.getString("userLogin");
+                String userPass = jsonRq.getString("userPass");
+                try (PrintWriter out = response.getWriter()) {
+                    out.print(Users.authUser(userName, userPass).toString());
+                } catch (IOException e) {
+                    log.error(e.getMessage());
+                }
+                break;
         }
     }
 }
