@@ -30,10 +30,15 @@ public class MenuItemsServlet extends HttpServlet implements IServlet  {
         // RESPONSE ---------------------------------------
         response.setContentType("application/json;charset=utf-8");
         JSONObject jsonRs = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        try {
+            jsonArray = Pages.getPageList(sessionString);
+        } catch (Exception e) {
 
+        }
         jsonRs.put("errorCode", "0");
         jsonRs.put("errorMsg", "");
-        jsonRs.put("items", Pages.getPageList(sessionString));
+        jsonRs.put("items", jsonArray);
 
         try (PrintWriter out = response.getWriter()) {
             out.print(jsonRs.toString());

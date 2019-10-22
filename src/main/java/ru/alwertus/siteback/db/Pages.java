@@ -30,27 +30,30 @@ public class Pages {
         String userId = Users.getUserId(sessionKey);
         ResultSet rs = null;
         String outFieldList = "*";
-        if (userId.equals("") || sessionKey.equals(""))
-            rs = DB.getData("select " + outFieldList + " from pagelist where access_id in (select row_id from roles where name='any');");
-        else {
-            String userRoleName = Users.getRole(userId);
-            String userRoleId = DB.getFieldValue("select row_id from roles where name='" + userRoleName + "';", "row_id");
-            log.trace("UserRoleName = " + userRoleName);
-            log.trace("UserRoleId   = " + userRoleId);
-            switch (userRoleName) {
-                case "god":
-                    rs = DB.getData("select " + outFieldList + " from pagelist;"); break;
-                case "owner":
-                    rs = DB.getData("select " + outFieldList + " from pagelist where owner_id='" + userId + "' or access_id>'" + userRoleId + "';"); break;
-                case "user":
-                case "admin":
-                    rs = DB.getData("select " + outFieldList + " from pagelist where access_id>='" + userRoleId + "';"); break;
-                default:
-                    rs = DB.getData("select " + outFieldList + " from pagelist where access_id in (select row_id from roles where name='any');");
-            }
-        }
         JSONArray jsonArr = new JSONArray();
         try {
+            if (userId.equals("") || sessionKey.equals(""))
+                rs = DB.getData("select " + outFieldList + " from pagelist where access_id in (select row_id from roles where name='any');");
+            else {
+                String userRoleName = Users.getRole(userId);
+                String userRoleId = DB.getFieldValue("select row_id from roles where name='" + userRoleName + "';", "row_id");
+                log.trace("UserRoleName = " + userRoleName);
+                log.trace("UserRoleId   = " + userRoleId);
+                switch (userRoleName) {
+                    case "god":
+                        rs = DB.getData("select " + outFieldList + " from pagelist;");
+                        break;
+                    case "owner":
+                        rs = DB.getData("select " + outFieldList + " from pagelist where owner_id='" + userId + "' or access_id>'" + userRoleId + "';");
+                        break;
+                    case "user":
+                    case "admin":
+                        rs = DB.getData("select " + outFieldList + " from pagelist where access_id>='" + userRoleId + "';");
+                        break;
+                    default:
+                        rs = DB.getData("select " + outFieldList + " from pagelist where access_id in (select row_id from roles where name='any');");
+                }
+            }
             while (rs.next()) {
                 jsonArr.put(new JSONObject()
                         .put("id", rs.getString("row_id"))
@@ -58,10 +61,18 @@ public class Pages {
                         .put("link", rs.getString("link"))
                 );
             }
+        } catch (Exception e) {
+            log.error("Error get PageList: " + e.getMessage());
+        } finally {
+            return jsonArr;
+        }
+        /*
+        try {
+
         } catch (SQLException e) {
             log.error("Error get ResultSet value(s): " + e.getMessage());
         }
 
-        return jsonArr;
+        return jsonArr;*/
     }
 }

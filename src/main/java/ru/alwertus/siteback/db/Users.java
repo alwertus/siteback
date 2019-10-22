@@ -14,23 +14,29 @@ public class Users {
 
     public static JSONObject authUser(String login, String password) {
         log.debug("# Try to authentication user (login:pass) = " + login + ":" + password);
-        String userId = getUserId(login, password);
-
         JSONObject jsonRs = new JSONObject();
-        if (userId.equals("")) {
+        try {
+            String userId = getUserId(login, password);
+            if (userId.equals("")) {
+                jsonRs.put("sessionString", "");
+                jsonRs.put("loginName", "Гость");
+                jsonRs.put("errorCode", "1");
+                jsonRs.put("errorMsg", "Нет такого пользователя");
+            } else {
+                String sessionKey = generateNewSessionKey(userId);
+                jsonRs.put("sessionString", sessionKey);
+                jsonRs.put("loginName", getUserName(sessionKey));
+                jsonRs.put("errorCode", "0");
+                jsonRs.put("errorMsg", "");
+            }
+        } catch (Exception e) {
             jsonRs.put("sessionString", "");
             jsonRs.put("loginName", "Гость");
-            jsonRs.put("errorCode", "1");
-            jsonRs.put("errorMsg", "Нет такого пользователя");
-        } else {
-            String sessionKey = generateNewSessionKey(userId);
-            jsonRs.put("sessionString", sessionKey);
-            jsonRs.put("loginName", getUserName(sessionKey));
-            jsonRs.put("errorCode", "0");
-            jsonRs.put("errorMsg", "");
+            jsonRs.put("errorCode", "2");
+            jsonRs.put("errorMsg", e.getMessage());
+        } finally {
+            return jsonRs;
         }
-
-        return jsonRs;
     }
 
     // return OK:Logout or ERR:0

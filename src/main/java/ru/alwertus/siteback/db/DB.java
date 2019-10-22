@@ -27,14 +27,17 @@ public class DB {
 
     // принудительно открыть соединение
     private static boolean openConnection() {
+        log.debug("# Try open new DB connection...");
         try {
             connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             if (!isPingSuccess()) {
                 connection = null;
+                log.trace("<< Success open DB connection");
                 return false;
             }
         } catch (SQLException e) {
             connection = null;
+            log.trace("<< Error open DB connection: " + e.getMessage());
             return false;
         }
         return true;

@@ -35,7 +35,7 @@ public class AuthServlet extends HttpServlet implements IServlet  {
                 try (PrintWriter out = response.getWriter()) {
                     out.print(jsonRs.toString());
                 } catch (IOException e) {
-                    log.error(e.getMessage());
+                    log.error("logout error: " + e.getMessage());
                 }
                 break;
             case "login":
@@ -44,7 +44,7 @@ public class AuthServlet extends HttpServlet implements IServlet  {
                 try (PrintWriter out = response.getWriter()) {
                     out.print(Users.authUser(userName, userPass).toString());
                 } catch (IOException e) {
-                    log.error(e.getMessage());
+                    log.error("login error: " + e.getMessage());
                 }
                 break;
         }

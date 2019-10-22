@@ -53,7 +53,7 @@ public class Main {
 */
 
         ServerStarter serverStarter = new ServerStarter();
-        if (true)
+        if (false)
             new Thread(serverStarter).start();                                                                          // Запуск Jetty Server в новом потоке
         else
             serverStarter.run();                                                                                        // Запуск Jetty Server
