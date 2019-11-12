@@ -19,19 +19,19 @@ public class Users {
             String userId = getUserId(login, password);
             if (userId.equals("")) {
                 jsonRs.put("sessionString", "");
-                jsonRs.put("loginName", "Гость");
+                jsonRs.put("userName", "Гость");
                 jsonRs.put("errorCode", "1");
                 jsonRs.put("errorMsg", "Нет такого пользователя");
             } else {
                 String sessionKey = generateNewSessionKey(userId);
                 jsonRs.put("sessionString", sessionKey);
-                jsonRs.put("loginName", getUserName(sessionKey));
+                jsonRs.put("userName", getUserName(sessionKey));
                 jsonRs.put("errorCode", "0");
                 jsonRs.put("errorMsg", "");
             }
         } catch (Exception e) {
             jsonRs.put("sessionString", "");
-            jsonRs.put("loginName", "Гость");
+            jsonRs.put("userName", "Гость");
             jsonRs.put("errorCode", "2");
             jsonRs.put("errorMsg", e.getMessage());
         } finally {
