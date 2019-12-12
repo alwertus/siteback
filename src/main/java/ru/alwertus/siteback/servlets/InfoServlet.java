@@ -1,11 +1,6 @@
 package ru.alwertus.siteback.servlets;
 
-import old.db.DBOperation;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.json.JSONArray;
 import org.json.JSONObject;
-import ru.alwertus.siteback.db.Users;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,10 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class AuthServlet extends HttpServlet implements IServlet {
-
-    private static Logger log = LogManager.getLogger(AuthServlet.class.getName());
-    @Override public String getURL() { return "/auth"; }
+public class InfoServlet extends HttpServlet implements IServlet {
+    @Override public String getURL() { return "/info"; }
 
     // get POST message
     @Override
@@ -28,24 +21,27 @@ public class AuthServlet extends HttpServlet implements IServlet {
         String operation = jsonRq.getString("operation");
 
         log.trace(jsonRq.toString());
+
         switch (operation) {
-            case "logout":
+            case "getInfoList":
                 jsonRs.put("errorCode", "0");
-                jsonRs.put("errorMsg", Users.logoutUser(jsonRq.getString("sessionString")));
+                jsonRs.put("errorMsg", "");
+                jsonRs.put("itemList", "{asdasd}");
+
                 try (PrintWriter out = response.getWriter()) {
                     out.print(jsonRs.toString());
                 } catch (IOException e) {
-                    log.error("logout error: " + e.getMessage());
+                    log.error("Error put message to Response: " + e.getMessage());
                 }
                 break;
             case "login":
-                String userName = jsonRq.getString("userLogin");
+                /*String userName = jsonRq.getString("userLogin");
                 String userPass = jsonRq.getString("userPass");
                 try (PrintWriter out = response.getWriter()) {
-                    out.print(Users.authUser(userName, userPass).toString());
+//                    out.print(Users.authUser(userName, userPass).toString());
                 } catch (IOException e) {
                     log.error("login error: " + e.getMessage());
-                }
+                }*/
                 break;
         }
     }

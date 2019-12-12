@@ -10,10 +10,7 @@ import org.eclipse.jetty.server.handler.ShutdownHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import ru.alwertus.siteback.common.Global;
-import ru.alwertus.siteback.servlets.AdminServlet;
-import ru.alwertus.siteback.servlets.AuthServlet;
-import ru.alwertus.siteback.servlets.IServlet;
-import ru.alwertus.siteback.servlets.MenuItemsServlet;
+import ru.alwertus.siteback.servlets.*;
 
 public class ServerStarter implements Runnable {
     private static final Logger log = LogManager.getLogger(ServerStarter.class);                                        // логгер
@@ -22,7 +19,8 @@ public class ServerStarter implements Runnable {
     private IServlet[] servletlist = {                                                                                  // список Сервлетов
         new AdminServlet(),
         new MenuItemsServlet(),
-        new AuthServlet()
+        new AuthServlet(),
+        new InfoServlet()
     };
 
     @Override
